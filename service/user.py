@@ -2,7 +2,7 @@ from fastapi import UploadFile
 from db.weaviate import weaviate_create_user
 from db.mongodb import mongo_create_user
 from utils.line import line_create_user
-from deepface import DeepFace
+from utils.deepface import get_face_vector
 
 def get_user_s():
     pass
@@ -16,12 +16,13 @@ def create_user_s(img: UploadFile, user_params):
         img_path = f"./user_photo/{img.filename}"
 
         # use deepface
-        vector = DeepFace.represent(img_path=img_path, model_name="ArcFace")[0]["embedding"]
+        vector = get_face_vector(img_path=img_path)
         user_params['vector'] = vector
         w_res = weaviate_create_user(user_params=user_params)
         uuid = w_res['uuid']
         user_params['_id'] = uuid
         m_res = mongo_create_user(user_params=user_params)
+        
         if m_res["status"] == 1 and w_res["status"] == 1:
             line_create_user(name=user_params['name'], uuid=uuid)
             return {"msg": f"create success, user id is {uuid}"}
