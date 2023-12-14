@@ -16,3 +16,6 @@ dist/
 
 # Env
 .env
+
+# user photo
+user_photo

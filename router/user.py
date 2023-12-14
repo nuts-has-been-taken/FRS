@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,File, UploadFile, Form
+from controller.user import create_user_c
 
 router = APIRouter(
     prefix='/user',
@@ -6,11 +7,15 @@ router = APIRouter(
 )
 
 @router.post("/")
-def upload_user():
+def upload_user(
+    name: str = Form(...),
+    phone: str = Form(...),
+    img: UploadFile = File(...),
+):
     """
     Upload user information.
     """
-    pass
+    return create_user_c(img=img, name=name, phone=phone)
 
 @router.get("/{name}")
 def get_user(name: str):
