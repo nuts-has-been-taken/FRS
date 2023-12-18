@@ -17,7 +17,7 @@ def face_recognize_s(img: UploadFile):
     if res["status"] == 0:
         print("沒有找到這個資料")
         line_recog_unknown_user()
-        return res
+        return {'msg': 'not found user', 'user': 'unknown'}
     
     # get user from mongodb
     user_id = res['msg']
