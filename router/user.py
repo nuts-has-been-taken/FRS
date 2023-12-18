@@ -10,12 +10,13 @@ router = APIRouter(
 def upload_user(
     name: str = Form(...),
     phone: str = Form(...),
+    identity: str = Form(...),
     img: UploadFile = File(...),
 ):
     """
     Upload user information.
     """
-    return create_user_c(img=img, name=name, phone=phone)
+    return create_user_c(img=img, name=name, phone=phone, identity=identity)
 
 @router.get("/{name}")
 def get_user(name: str):

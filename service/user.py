@@ -11,9 +11,9 @@ def create_user_s(img: UploadFile, user_params):
     # save img and put params to db
     try:
         # save img
-        with open(f"./user_photo/{img.filename}", "wb") as file_object:
+        with open(f"./user_photo/create_user/{img.filename}", "wb") as file_object:
             file_object.write(img.file.read())
-        img_path = f"./user_photo/{img.filename}"
+        img_path = f"./user_photo/create_user/{img.filename}"
 
         # use deepface
         vector = get_face_vector(img_path=img_path)

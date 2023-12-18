@@ -27,5 +27,19 @@ def weaviate_create_user(user_params):
 def weaviate_get_user():
     pass
 
-def weaviate_vector_search():
-    pass
+def weaviate_vector_search(near_vector):
+    result = (
+        W_CLIENT.query.get("Face", ["answer"])
+        .with_near_vector(near_vector)
+        .with_limit(1)
+        .with_additional(["certainty"])
+        .do()
+    )
+
+    if result["data"]["Get"]["Graph"][0]["_additional"]["certainty"] > 0.6:
+        return {
+            "status": 1,
+            "msg": result["data"]["Get"]["Graph"][0]["_additional"]["id"],
+        }
+    else:
+        return {"status": 0, "msg": "unknown user"}
