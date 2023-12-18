@@ -1,7 +1,7 @@
 from db.weaviate import weaviate_vector_search
 from db.mongodb import mongo_get_user
 from utils.deepface import get_face_vector
-from utils.line import line_recog_unknow_user, line_recog_user
+from utils.line import line_recog_unknown_user, line_recog_user
 from fastapi import UploadFile
 
 def face_recognize_s(img: UploadFile):
@@ -13,16 +13,25 @@ def face_recognize_s(img: UploadFile):
 
     # recognize
     vector = get_face_vector(img_path=img_path)
-    res = weaviate_vector_search(near_vector=vector)
+    res = weaviate_vector_search(near_vector={"vector": vector})
     if res["status"] == 0:
-        line_recog_unknow_user()
+        print("沒有找到這個資料")
+        line_recog_unknown_user()
         return res
     
     # get user from mongodb
     user_id = res['msg']
-    user = mongo_get_user(user_id=user_id)
+    user_info = mongo_get_user(user_id=user_id)['msg']
+
+    user = {
+        "id": user_info['_id'],
+        "name": user_info['name'],
+        "phone": user_info['phone'],
+        'identity': user_info['identity']
+    }
 
     # line notify
+    print(f"搜尋到此筆資料:{user}")
     line_recog_user(user)
 
     # del img

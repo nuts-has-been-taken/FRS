@@ -30,4 +30,5 @@ def create_user_s(img: UploadFile, user_params):
             return {"msg": f"Create user fail, err msg: Weaviate:\n{w_res['msg']}\nMongoDB:\n{m_res['msg']}"}
     except Exception as e:
         # del user in weaviate & mongodb
+        print(e)
         return {"msg": e}
