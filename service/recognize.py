@@ -1,5 +1,5 @@
 from db.weaviate import weaviate_vector_search
-from db.mongodb import mongo_get_user
+from db.mongodb import mongo_get_user_by_id
 from utils.deepface import get_face_vector
 from utils.line import line_recog_unknown_user, line_recog_user
 from fastapi import UploadFile
@@ -21,7 +21,7 @@ def face_recognize_s(img: UploadFile):
     
     # get user from mongodb
     user_id = res['msg']
-    user_info = mongo_get_user(user_id=user_id)['msg']
+    user_info = mongo_get_user_by_id(user_id=user_id)
 
     user = {
         "id": user_info['_id'],
