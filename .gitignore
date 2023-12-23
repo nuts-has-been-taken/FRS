@@ -19,3 +19,6 @@ dist/
 
 # user photo
 user_photo
+
+# docker-compose
+docker-compose.yml

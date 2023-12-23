@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  isl_frs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8100" 
+    environment:
+      WEAVIATE_URL: 
+      WEAVIATE_API_KEY: 
+      MONGODB_URL: 
+      LINE_NOTIFY_TOKEN: 
+    command: python main.py
