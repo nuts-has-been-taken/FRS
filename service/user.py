@@ -7,6 +7,8 @@ from utils.deepface import get_face_vector
 # Get
 def get_user_by_name_s(name:str):
     res = mongo_get_user_by_name(name)
+    if res==0:
+        return {"msg": f"No such person in the db"}
     res.pop('vector')
     return res
 
@@ -42,8 +44,9 @@ def create_user_s(imgs: list[UploadFile], user_params):
 def update_user_info_s(user_params:dict):
     try:
         name = user_params['name']
-        user_old_info = get_user_by_name_s(name)
-
+        user_old_info = mongo_get_user_by_name(name)
+        if user_old_info==0:
+            return {"msg": f"No such person in the db"}
         # set params
         phone = user_params['phone'] if user_params['phone'] else user_old_info['phone']
         identity = user_params['identity'] if user_params['identity'] else user_old_info['identity']
@@ -53,8 +56,11 @@ def update_user_info_s(user_params:dict):
         }
         
         # update new info
-        mongo_update_user_by_name(name, user_new_info)
-        return {"msg": f"update success"}
+        m_res = mongo_update_user_by_name(name, user_new_info)
+        if m_res==0:
+            return {"msg": f"No such person in the db"}
+        else:
+            return {"msg": f"update success"}
     except Exception as e:
         return {"msg": f"Error: {e}"}
 
@@ -62,7 +68,9 @@ def update_user_info_s(user_params:dict):
 def del_user_s(name: str):
     try:
         # delete mongodb data
-        mongo_del_user_by_name(name)
+        m_res = mongo_del_user_by_name(name)
+        if m_res==0:
+            return {"msg": f"No such person in the db"}
         # delete weaviate data
         weaviate_del_user_by_name(name)
         return {"msg": f"delete success"}
