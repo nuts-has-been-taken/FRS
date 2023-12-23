@@ -42,7 +42,7 @@ def create_user_s(imgs: list[UploadFile], user_params):
 def update_user_info_s(user_params:dict):
     try:
         name = user_params['name']
-        user_old_info = get_user_by_name_s(name)[0]
+        user_old_info = get_user_by_name_s(name)
 
         # set params
         phone = user_params['phone'] if user_params['phone'] else user_old_info['phone']
