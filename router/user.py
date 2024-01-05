@@ -31,8 +31,8 @@ def get_user(name: str):
 @router.post("/{name}")
 def update_user(
     name: str,
-    phone: str = Form(None, required=False),
-    identity: str = Form(None, required=False),
+    phone: str = Form(None),
+    identity: str = Form(None),
     ):
     """
     Update user info
